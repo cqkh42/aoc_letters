@@ -2,19 +2,20 @@
 Parsing functions to identify characters from visual outputs.
 
 """
-from typing import List, Generator, Iterable
+from typing import Generator, Iterable, Any
 
-from aoc_letters.mappings import mappings
+from aocr.mappings import mappings
 
 
-def _chunks(lst, n) -> Generator[int]:
+
+def _chunks(lst, n) -> Generator[int, None, None]:
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 
 def _format_row(row: Iterable[int]) -> str:
-    row = ''.join('#' if char == 1 else ' ' for char in row)
+    row = ''.join('#' if str(char) == '1' else ' ' for char in row)
     return row
 
 
@@ -38,10 +39,10 @@ def letter(text: Iterable[Iterable[int]]) -> str:
     return solution
 
 
-def word(rows: List[List[int]]) -> str:
+def word(rows: Iterable[Any]) -> str:
     """
     Parse a visual word into a character. 6 Rows should be given as
-    a list with a 1 to indicate a filled cell.
+    a list with a 1 (str or int) to indicate a filled cell.
 
     Parameters
     ----------
@@ -52,6 +53,16 @@ def word(rows: List[List[int]]) -> str:
     solution: str
 
     """
+
+    if isinstance(rows, str):
+        if '\n' in rows:
+            rows = rows.split('\n')
+        else:
+            rows = _chunks(rows, len(rows)//6)
+    else:
+        rows = [k for k in rows if k != '\n']
+        rows = list(_chunks(rows, len(rows)//6))
+    rows = list(rows)
     chars = (_chunks(row, 5) for row in rows)
     letters = zip(*chars)
     answer = (letter(char) for char in letters)

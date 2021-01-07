@@ -1,6 +1,6 @@
 import pytest
 
-from aoc_letters import parse
+from aocr import parse
 
 
 @pytest.mark.parametrize('text', [

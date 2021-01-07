@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="aoc_letters",
+    name="aocr",
     version="0.1",
     description="Parsing text output for Advent of Code puzzles",
     url="https://github.com/cqkh42/aoc_letters",
